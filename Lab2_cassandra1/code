@@ -1,0 +1,133 @@
+cqlsh> CREATE KEYSPACE Employee WITH REPLICATION={'class':'SimpleStrategy','replication_factor':1};
+cqlsh> DESCRIBE KEYSPACES
+
+employee  system_auth         system_schema  system_views         
+system    system_distributed  system_traces  system_virtual_schema
+
+
+cqlsh> USE Employee;
+
+cqlsh:employee> CREATE TABLE employee_info (
+            ... emp_id int,
+            ... dept_name text,
+            ... salary double,
+            ... date_of_joining timestamp,
+            ... emp_name text,
+            ... designation text,
+            ... primary key(emp_id,salary));
+cqlsh:employee> select * from employee_info;
+
+ emp_id | salary | date_of_joining | dept_name | designation | emp_name
+--------+--------+-----------------+-----------+-------------+----------
+
+(0 rows)
+cqlsh:employee> BEGIN BATCH
+            ... INSERT INTO Employee_Info(Emp_id, Emp_Name, Designation, Date_Of_Joining, salary, Dept_name)
+            ... VALUES (120,'Asha','Manager','2021-04-01',30000.0,'CSE')
+            ... INSERT INTO Employee_Info(Emp_id, Emp_Name, Designation, Date_Of_Joining, salary, Dept_name)
+            ... VALUES (121,'Kiran','Emp','2019-04-20',20000.0,'CSE')
+            ... INSERT INTO Employee_Info(Emp_id, Emp_Name, Designation, Date_Of_Joining, salary, Dept_name)
+            ... VALUES (123,'Samarth','Emp','2020-08-01',22500.0,'CSE')
+            ... APPLY BATCH;
+cqlsh:employee> select * from employee_info;
+
+ emp_id | salary | date_of_joining                 | dept_name | designation | emp_name
+--------+--------+---------------------------------+-----------+-------------+----------
+    120 |  30000 | 2021-03-31 18:30:00.000000+0000 |       CSE |     Manager |     Asha
+    123 |  22500 | 2020-07-31 18:30:00.000000+0000 |       CSE |         Emp |  Samarth
+    121 |  20000 | 2019-04-19 18:30:00.000000+0000 |       CSE |         Emp |    Kiran
+
+(3 rows)
+cqlsh:employee> paging off;
+Disabled Query paging.
+cqlsh:employee> select * from employee_info where emp_id in(120,121,123) order by salary;
+
+ emp_id | salary | date_of_joining                 | dept_name | designation | emp_name
+--------+--------+---------------------------------+-----------+-------------+----------
+    121 |  20000 | 2019-04-19 18:30:00.000000+0000 |       CSE |         Emp |    Kiran
+    123 |  22500 | 2020-07-31 18:30:00.000000+0000 |       CSE |         Emp |  Samarth
+    120 |  30000 | 2021-03-31 18:30:00.000000+0000 |       CSE |     Manager |     Asha
+
+cqlsh:employee> update employee_info set emp_name='david',dept_name='ECE' where emp_id=121 and salary=20000;
+cqlsh:employee> select * from employee_info ;
+
+ emp_id | salary | date_of_joining                 | dept_name | designation | emp_name
+--------+--------+---------------------------------+-----------+-------------+----------
+    120 |  30000 | 2021-03-31 18:30:00.000000+0000 |       CSE |     Manager |     Asha
+    123 |  22500 | 2020-07-31 18:30:00.000000+0000 |       CSE |         Emp |  Samarth
+    121 |  20000 | 2019-04-19 18:30:00.000000+0000 |       ECE |         Emp |    david
+
+(3 rows)
+
+cqlsh:employee> alter table employee_info add projects set<text>;
+cqlsh:employee> select * from employee_info ;
+
+ emp_id | salary | date_of_joining                 | dept_name | designation | emp_name | projects
+--------+--------+---------------------------------+-----------+-------------+----------+----------
+    120 |  30000 | 2021-03-31 18:30:00.000000+0000 |       CSE |     Manager |     Asha |     null
+    123 |  22500 | 2020-07-31 18:30:00.000000+0000 |       CSE |         Emp |  Samarth |     null
+    121 |  20000 | 2019-04-19 18:30:00.000000+0000 |       ECE |         Emp |    david |     null
+
+(3 rows)
+
+cqlsh:employee> update employee_info set projects=projects+{'A','B'} where emp_id=121 and salary=20000;
+cqlsh:employee> select * from employee_info ;
+
+ emp_id | salary | date_of_joining                 | dept_name | designation | emp_name | projects
+--------+--------+---------------------------------+-----------+-------------+----------+------------
+    120 |  30000 | 2021-03-31 18:30:00.000000+0000 |       CSE |     Manager |     Asha |       null
+    123 |  22500 | 2020-07-31 18:30:00.000000+0000 |       CSE |         Emp |  Samarth |       null
+    121 |  20000 | 2019-04-19 18:30:00.000000+0000 |       ECE |         Emp |    david | {'A', 'B'}
+
+(3 rows)
+cqlsh:employee> update employee_info set projects={'C'} where emp_id=123 and salary=22500;
+cqlsh:employee> select * from employee_info ;
+
+ emp_id | salary | date_of_joining                 | dept_name | designation | emp_name | projects
+--------+--------+---------------------------------+-----------+-------------+----------+------------
+    120 |  30000 | 2021-03-31 18:30:00.000000+0000 |       CSE |     Manager |     Asha |       null
+    123 |  22500 | 2020-07-31 18:30:00.000000+0000 |       CSE |         Emp |  Samarth |      {'C'}
+    121 |  20000 | 2019-04-19 18:30:00.000000+0000 |       ECE |         Emp |    david | {'A', 'B'}
+
+(3 rows)
+cqlsh:employee> update employee_info set projects=projects+{'D'} where emp_id=120 and salary=30000;
+cqlsh:employee> select * from employee_info ;
+
+ emp_id | salary | date_of_joining                 | dept_name | designation | emp_name | projects
+--------+--------+---------------------------------+-----------+-------------+----------+------------
+    120 |  30000 | 2021-03-31 18:30:00.000000+0000 |       CSE |     Manager |     Asha |      {'D'}
+    123 |  22500 | 2020-07-31 18:30:00.000000+0000 |       CSE |         Emp |  Samarth |      {'C'}
+    121 |  20000 | 2019-04-19 18:30:00.000000+0000 |       ECE |         Emp |    david | {'A', 'B'}
+
+(3 rows)
+
+cqlsh:employee> INSERT INTO Employee_Info(Emp_id, Emp_Name, Designation, Date_Of_Joining, salary, Dept_name)
+            ... VALUES (125,'george','Emp','2021-03-08',35000.0,'ISE')
+            ... using ttl 15;
+cqlsh:employee> select * from employee_info ;
+
+ emp_id | salary | date_of_joining                 | dept_name | designation | emp_name | projects
+--------+--------+---------------------------------+-----------+-------------+----------+------------
+    120 |  30000 | 2021-03-31 18:30:00.000000+0000 |       CSE |     Manager |     Asha |      {'D'}
+    123 |  22500 | 2020-07-31 18:30:00.000000+0000 |       CSE |         Emp |  Samarth |      {'C'}
+    125 |  35000 | 2021-03-07 18:30:00.000000+0000 |       ISE |         Emp |   george |       null
+    121 |  20000 | 2019-04-19 18:30:00.000000+0000 |       ECE |         Emp |    david | {'A', 'B'}
+
+(4 rows)
+cqlsh:employee> select * from employee_info ;
+
+ emp_id | salary | date_of_joining                 | dept_name | designation | emp_name | projects
+--------+--------+---------------------------------+-----------+-------------+----------+------------
+    120 |  30000 | 2021-03-31 18:30:00.000000+0000 |       CSE |     Manager |     Asha |      {'D'}
+    123 |  22500 | 2020-07-31 18:30:00.000000+0000 |       CSE |         Emp |  Samarth |      {'C'}
+    121 |  20000 | 2019-04-19 18:30:00.000000+0000 |       ECE |         Emp |    david | {'A', 'B'}
+
+(3 rows)
+
+
+
+
+
+
+
+
