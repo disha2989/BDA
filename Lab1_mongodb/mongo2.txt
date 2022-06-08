@@ -1,0 +1,304 @@
+Microsoft Windows [Version 10.0.19043.1706]
+(c) Microsoft Corporation. All rights reserved.
+
+C:\Users\DELL>mongo
+MongoDB shell version v5.0.8
+connecting to: mongodb://127.0.0.1:27017/?compressors=disabled&gssapiServiceName=mongodb
+Implicit session: session { "id" : UUID("3b8dda34-d3d5-442b-86aa-5073d1be7cf5") }
+MongoDB server version: 5.0.8
+================
+Warning: the "mongo" shell has been superseded by "mongosh",
+which delivers improved usability and compatibility.The "mongo" shell has been deprecated and will be removed in
+an upcoming release.
+For installation instructions, see
+https://docs.mongodb.com/mongodb-shell/install/
+================
+---
+The server generated these startup warnings when booting:
+        2022-06-08T14:51:01.383+05:30: Access control is not enabled for the database. Read and write access to data and configuration is unrestricted
+---
+---
+        Enable MongoDB's free cloud-based monitoring service, which will then receive and display
+        metrics about your deployment (disk utilization, CPU, operation statistics, etc).
+
+        The monitoring data will be available on a MongoDB website with a unique URL accessible to you
+        and anyone you share the URL with. MongoDB may use this information to make product
+        improvements and to suggest MongoDB products and deployment options to you.
+
+        To enable free monitoring, run the following command: db.enableFreeMonitoring()
+        To permanently disable this reminder, run the following command: db.disableFreeMonitoring()
+---
+> show db;
+uncaught exception: Error: don't know how to show [db] :
+shellHelper.show@src/mongo/shell/utils.js:1211:11
+shellHelper@src/mongo/shell/utils.js:838:15
+@(shellhelp2):1:1
+> show dbs;
+admin    0.000GB
+config   0.000GB
+english  0.000GB
+local    0.000GB
+mydb     0.000GB
+> db;
+test
+> use mydb;
+switched to db mydb
+> db;
+mydb
+> db.student.find();
+{ "_id" : ObjectId("629bcf7dbf398af73b0a7d24"), "id" : 1, "studname" : "michael", "grade" : "a", "hobbies" : "surfing" }
+{ "_id" : ObjectId("629bd10a8864e82334f9f32c"), "grade" : "c", "id" : 3, "studname" : "david", "hobbies" : "skating" }
+{ "_id" : 4, "grade" : "c", "studname" : "david", "hobbies" : "skating" }
+> db.student.update({_id:3,studname:"da",grade:"c"},{$set:{hobbies:"chess"}},{upsert:true});
+WriteResult({ "nMatched" : 0, "nUpserted" : 1, "nModified" : 0, "_id" : 3 })
+> db.student.find();
+{ "_id" : ObjectId("629bcf7dbf398af73b0a7d24"), "id" : 1, "studname" : "michael", "grade" : "a", "hobbies" : "surfing" }
+{ "_id" : ObjectId("629bd10a8864e82334f9f32c"), "grade" : "c", "id" : 3, "studname" : "david", "hobbies" : "skating" }
+{ "_id" : 4, "grade" : "c", "studname" : "david", "hobbies" : "skating" }
+{ "_id" : 3, "grade" : "c", "studname" : "da", "hobbies" : "chess" }
+> db.student.update({id:3,studname:"hero",grade:"c"},{$set:{hobbies:"kindle"}},{upsert:true});
+WriteResult({
+        "nMatched" : 0,
+        "nUpserted" : 1,
+        "nModified" : 0,
+        "_id" : ObjectId("62a07476ad944854c5848eff")
+})
+> db.student.find();
+{ "_id" : ObjectId("629bcf7dbf398af73b0a7d24"), "id" : 1, "studname" : "michael", "grade" : "a", "hobbies" : "surfing" }
+{ "_id" : ObjectId("629bd10a8864e82334f9f32c"), "grade" : "c", "id" : 3, "studname" : "david", "hobbies" : "skating" }
+{ "_id" : 4, "grade" : "c", "studname" : "david", "hobbies" : "skating" }
+{ "_id" : 3, "grade" : "c", "studname" : "da", "hobbies" : "chess" }
+{ "_id" : ObjectId("62a07476ad944854c5848eff"), "grade" : "c", "id" : 3, "studname" : "hero", "hobbies" : "kindle" }
+> db.student.update({id:3,studname:"hero",grade:"c"},{$set:{hobbies:"eating"}},{upsert:true});
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+> db.student.find();
+{ "_id" : ObjectId("629bcf7dbf398af73b0a7d24"), "id" : 1, "studname" : "michael", "grade" : "a", "hobbies" : "surfing" }
+{ "_id" : ObjectId("629bd10a8864e82334f9f32c"), "grade" : "c", "id" : 3, "studname" : "david", "hobbies" : "skating" }
+{ db.student.find();
+{ "_id" : ObjectId("629bcf7dbf398af73b0a7d24"), "id" : 1, "studname" : "michael", "grade" : "a", "hobbies" : "surfing" }"
+{ "_id" : ObjectId("629bd10a8864e82334f9f32c"), "grade" : "c", "id" : 3, "studname" : "david", "hobbies" : "skating" } ""
+{ "_id" : 4, "grade" : "c", "studname" : "david", "hobbies" : "skating" }-out C:\Users\DELL\Desktop\output.txt -fields "
+{ "_id" : 3, "grade" : "c", "studname" : "da", "hobbies" : "chess" }
+{ "_id" : ObjectId("62a07476ad944854c5848eff"), "grade" : "c", "id" : 3, "studname" : "hero", "hobbies" : "eating" }
+> mongoexport --host localhost --db student --collection airlines --csv --out C:\Users\Dell\Desktop\output.txt -fields "Year","Quarter"
+uncaught exception: SyntaxError: unexpected token: identifier :
+@(shell):1:14
+> mongoexport --host localhost --db student --collection airlines --csv --out Users\Dell\Desktop\output.txt -fields "Year","Quarter"
+uncaught exception: SyntaxError: unexpected token: identifier :
+@(shell):1:14
+> mongoexport --host localhost --db mydb --collection student --csv --out newfile.csv --fields studname,hobbies
+uncaught exception: SyntaxError: unexpected token: identifier :
+@(shell):1:14
+>
+> mongoexport --host localhost --db mydb --collection student --csv --out newfile.csv --fields studname,hobbies;
+uncaught exception: SyntaxError: unexpected token: identifier :
+@(shell):1:14
+> mongoexport --host localhost --db mydb --collection student --csv --out newfile.csv --fields "studname","hobbies";
+uncaught exception: SyntaxError: unexpected token: identifier :
+@(shell):1:14
+> db.students.save({studname:"disha",grade:"a"});
+WriteResult({ "nInserted" : 1 })
+> db.students.find();
+{ "_id" : ObjectId("62a087cce87f4356662781d7"), "studname" : "disha", "grade" : "a" }
+> db.student.update({+id:3,studname:"david",grade:"c"},{$set:{hobbies:"skating"}},{upsert:true});
+uncaught exception: SyntaxError: expected property name, got '+' :
+@(shell):1:19
+> db.student.update({_id:3,studname:"david",grade:"c"},{$set:{hobbies:"skating"}},{upsert:true});
+WriteResult({
+        "nMatched" : 0,
+        "nUpserted" : 0,
+        "nModified" : 0,
+        "writeError" : {
+                "code" : 11000,
+                "errmsg" : "E11000 duplicate key error collection: mydb.student index: _id_ dup key: { _id: 3.0 }"
+        }
+})
+> db.students.find();
+{ "_id" : ObjectId("62a087cce87f4356662781d7"), "studname" : "disha", "grade" : "a" }
+> db.english.insert({_id:1,studname:"michael",grade:"a",hobbies:"surfing"});
+WriteResult({ "nInserted" : 1 })
+> db.students.find();
+{ "_id" : ObjectId("62a087cce87f4356662781d7"), "studname" : "disha", "grade" : "a" }
+> db.student.update({_id:2,studname:"david",grade:"c"},{$set:{hobbies:"skating"}},{upsert:true});
+WriteResult({ "nMatched" : 0, "nUpserted" : 1, "nModified" : 0, "_id" : 2 })
+> db.students.find();
+{ "_id" : ObjectId("62a087cce87f4356662781d7"), "studname" : "disha", "grade" : "a" }
+> db.students.save({_id:2,studname:"disha",grade:"a"});
+WriteResult({ "nMatched" : 0, "nUpserted" : 1, "nModified" : 0, "_id" : 2 })
+> db.students.find();
+{ "_id" : ObjectId("62a087cce87f4356662781d7"), "studname" : "disha", "grade" : "a" }
+{ "_id" : 2, "studname" : "disha", "grade" : "a" }
+> db.student.update({_id:3,studname:"david",grade:"c"},{$set:{hobbies:"skating"}},{upsert:true});
+WriteResult({
+        "nMatched" : 0,
+        "nUpserted" : 0,
+        "nModified" : 0,
+        "writeError" : {
+                "code" : 11000,
+                "errmsg" : "E11000 duplicate key error collection: mydb.student index: _id_ dup key: { _id: 3.0 }"
+        }
+})
+> db.students.find();
+{ "_id" : ObjectId("62a087cce87f4356662781d7"), "studname" : "disha", "grade" : "a" }
+{ "_id" : 2, "studname" : "disha", "grade" : "a" }
+> db.english.insert({_id:2,studname:"mich",grade:"b",hobbies:"dancing"});
+WriteResult({ "nInserted" : 1 })
+> db.english.insert({_id:3,studname:"ash",grade:"c",hobbies:"singing"});
+WriteResult({ "nInserted" : 1 })
+> db.students.find();
+{ "_id" : ObjectId("62a087cce87f4356662781d7"), "studname" : "disha", "grade" : "a" }
+{ "_id" : 2, "studname" : "disha", "grade" : "a" }
+> db.student.drop();
+true
+> db.createCollection("food");
+{ "ok" : 1 }
+> db.food.find();
+> db.food.insert({_id:1,fruits:['grapes','apples']});
+WriteResult({ "nInserted" : 1 })
+> db.food.insert({_id:1,fruits:['grapes','apples','cherry','mango']});
+WriteResult({
+        "nInserted" : 0,
+        "writeError" : {
+                "code" : 11000,
+                "errmsg" : "E11000 duplicate key error collection: mydb.food index: _id_ dup key: { _id: 1.0 }"
+        }
+})
+> db.food.find();
+{ "_id" : 1, "fruits" : [ "grapes", "apples" ] }
+> db.food.insert({_id:2,fruits:['grapes','apples','cherry','mango']});
+WriteResult({ "nInserted" : 1 })
+> db.food.find();
+{ "_id" : 1, "fruits" : [ "grapes", "apples" ] }
+{ "_id" : 2, "fruits" : [ "grapes", "apples", "cherry", "mango" ] }
+> db.food.insert({_id:3,fruits:['banana','mango']});
+WriteResult({ "nInserted" : 1 })
+> db.food.find();
+{ "_id" : 1, "fruits" : [ "grapes", "apples" ] }
+{ "_id" : 2, "fruits" : [ "grapes", "apples", "cherry", "mango" ] }
+{ "_id" : 3, "fruits" : [ "banana", "mango" ] }
+> db.food.insert({_id:4,fruits:['orange']});
+WriteResult({ "nInserted" : 1 })
+> db.food.find();
+{ "_id" : 1, "fruits" : [ "grapes", "apples" ] }
+{ "_id" : 2, "fruits" : [ "grapes", "apples", "cherry", "mango" ] }
+{ "_id" : 3, "fruits" : [ "banana", "mango" ] }
+{ "_id" : 4, "fruits" : [ "orange" ] }
+> db.food.find({fruits:['grapes','oranges']});
+> db.food.find({fruits:['oranges']});
+> db.food.find({fruits:['orange']});
+{ "_id" : 4, "fruits" : [ "orange" ] }
+> db.food.find({fruits.1:['grapes']});
+uncaught exception: SyntaxError: missing : after property id :
+@(shell):1:20
+> db.food.find({'fruits.1':'grapes'});
+> db.food.find({'fruits.0':'grapes'});
+{ "_id" : 1, "fruits" : [ "grapes", "apples" ] }
+{ "_id" : 2, "fruits" : [ "grapes", "apples", "cherry", "mango" ] }
+> db.food.find({'fruits.0':{$size:2}});
+> db.food.find({"fruits.0":{$size:2}});
+> db.food.find({'fruits':{$size:2}});
+{ "_id" : 1, "fruits" : [ "grapes", "apples" ] }
+{ "_id" : 3, "fruits" : [ "banana", "mango" ] }
+> db.food.find({"fruits":{$size:2}});
+{ "_id" : 1, "fruits" : [ "grapes", "apples" ] }
+{ "_id" : 3, "fruits" : [ "banana", "mango" ] }
+> db.food.find({"fruits":{$slice:1}});
+Error: error: {
+        "ok" : 0,
+        "errmsg" : "unknown operator: $slice",
+        "code" : 2,
+        "codeName" : "BadValue"
+}
+> db.food.find({_id:1},{"fruits":{$slice:1}});
+{ "_id" : 1, "fruits" : [ "grapes" ] }
+> db.food.find({"fruits":{$all:['banana','cherry']}});
+> db.food.find({fruits:{$all:['banana','cherry']}});
+> db.food.find({fruits:{$all:["banana","cherry"]}});
+> db.food.find({fruits:{$all:["banana","mango"]}});
+{ "_id" : 3, "fruits" : [ "banana", "mango" ] }
+> db.food.update();
+uncaught exception: Error: need a query :
+DBCollection.prototype._parseUpdate@src/mongo/shell/collection.js:459:15
+DBCollection.prototype.update@src/mongo/shell/collection.js:510:18
+@(shell):1:1
+> db.food.update({_id:3},{$set:{'fruits.1':'watermelon'}});
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+> db.food.find();
+{ "_id" : 1, "fruits" : [ "grapes", "apples" ] }
+{ "_id" : 2, "fruits" : [ "grapes", "apples", "cherry", "mango" ] }
+{ "_id" : 3, "fruits" : [ "banana", "watermelon" ] }
+{ "_id" : 4, "fruits" : [ "orange" ] }
+> db.food.update({_id:2},{$push:{price:{grapes:80,mango:30}}});
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+> db.food.find();
+{ "_id" : 1, "fruits" : [ "grapes", "apples" ] }
+{ "_id" : 2, "fruits" : [ "grapes", "apples", "cherry", "mango" ], "price" : [ { "grapes" : 80, "mango" : 30 } ] }
+{ "_id" : 3, "fruits" : [ "banana", "watermelon" ] }
+{ "_id" : 4, "fruits" : [ "orange" ] }
+> db.createCollection.("customers");
+uncaught exception: SyntaxError: missing name after . operator :
+@(shell):1:20
+> db.createCollection("customers");
+{ "ok" : 1 }
+> db.customers.insert({_custid:1,accbal:1000,acctype:"savings"});
+WriteResult({ "nInserted" : 1 })
+> db.customers.find();
+{ "_id" : ObjectId("62a0a46de87f4356662781d8"), "_custid" : 1, "accbal" : 1000, "acctype" : "savings" }
+> db.customers.insert({_custid:2,accbal:500,acctype:"savings"});
+WriteResult({ "nInserted" : 1 })
+> db.customers.find();
+{ "_id" : ObjectId("62a0a46de87f4356662781d8"), "_custid" : 1, "accbal" : 1000, "acctype" : "savings" }
+{ "_id" : ObjectId("62a0a489e87f4356662781d9"), "_custid" : 2, "accbal" : 500, "acctype" : "savings" }
+> db.customers.insert({_custid:3,accbal:300,acctype:"current"});
+WriteResult({ "nInserted" : 1 })
+> db.customers.insert({_custid:4,accbal:600,acctype:"current"});
+WriteResult({ "nInserted" : 1 })
+> db.customers.insert({_custid:5,accbal:200,acctype:"savings"});
+WriteResult({ "nInserted" : 1 })
+> db.customers.find();
+{ "_id" : ObjectId("62a0a46de87f4356662781d8"), "_custid" : 1, "accbal" : 1000, "acctype" : "savings" }
+{ "_id" : ObjectId("62a0a489e87f4356662781d9"), "_custid" : 2, "accbal" : 500, "acctype" : "savings" }
+{ "_id" : ObjectId("62a0a498e87f4356662781da"), "_custid" : 3, "accbal" : 300, "acctype" : "current" }
+{ "_id" : ObjectId("62a0a4a1e87f4356662781db"), "_custid" : 4, "accbal" : 600, "acctype" : "current" }
+{ "_id" : ObjectId("62a0a4ade87f4356662781dc"), "_custid" : 5, "accbal" : 200, "acctype" : "savings" }
+> db.customers.aggregate({$group:{{_id:"$_custid",accbal:{$sum:"$accbal"}}});
+...
+...
+> db.customers.aggregate({$group: {_id:"$_custid",accbal:{$sum:"$accbal"}}});
+{ "_id" : 2, "accbal" : 500 }
+{ "_id" : 4, "accbal" : 600 }
+{ "_id" : 5, "accbal" : 200 }
+{ "_id" : 3, "accbal" : 300 }
+{ "_id" : 1, "accbal" : 1000 }
+> db.customers.insert({_custid:5,accbal:2000,acctype:"savings"});
+WriteResult({ "nInserted" : 1 })
+> db.customers.find();
+{ "_id" : ObjectId("62a0a46de87f4356662781d8"), "_custid" : 1, "accbal" : 1000, "acctype" : "savings" }
+{ "_id" : ObjectId("62a0a489e87f4356662781d9"), "_custid" : 2, "accbal" : 500, "acctype" : "savings" }
+{ "_id" : ObjectId("62a0a498e87f4356662781da"), "_custid" : 3, "accbal" : 300, "acctype" : "current" }
+{ "_id" : ObjectId("62a0a4a1e87f4356662781db"), "_custid" : 4, "accbal" : 600, "acctype" : "current" }
+{ "_id" : ObjectId("62a0a4ade87f4356662781dc"), "_custid" : 5, "accbal" : 200, "acctype" : "savings" }
+{ "_id" : ObjectId("62a0a5d4e87f4356662781dd"), "_custid" : 5, "accbal" : 2000, "acctype" : "savings" }
+> db.customers.aggregate({$group: {_id:"$_custid",accbal:{$sum:"$accbal"}}});
+{ "_id" : 1, "accbal" : 1000 }
+{ "_id" : 4, "accbal" : 600 }
+{ "_id" : 5, "accbal" : 2200 }
+{ "_id" : 3, "accbal" : 300 }
+{ "_id" : 2, "accbal" : 500 }
+> db.customers.aggregate({$match:{acctype:"savings"}},{$group: {_id:"$_custid",accbal:{$sum:"$accbal"}}});
+{ "_id" : 2, "accbal" : 500 }
+{ "_id" : 5, "accbal" : 2200 }
+{ "_id" : 1, "accbal" : 1000 }
+> db.customers.aggregate({$match:{acctype:"current"}},{$group: {_id:"$_custid",accbal:{$sum:"$accbal"}}});
+{ "_id" : 3, "accbal" : 300 }
+{ "_id" : 4, "accbal" : 600 }
+> db.customers.aggregate({$match:{acctype:"savings"}},{$group: {_id:"$_custid",accbal:{$sum:"$accbal"}}},{$match:{accbal:{$gt:1200}}});
+{ "_id" : 5, "accbal" : 2200 }
+> db.customers.aggregate({$match:{acctype:"savings"}},{$group: {_id:"$_custid",accbal:{$sum:"$accbal"}}},{$match:{accbal:{$gt:500}}});
+{ "_id" : 1, "accbal" : 1000 }
+{ "_id" : 5, "accbal" : 2200 }
+> db.customers.aggregate({$match:{acctype:"savings"}},{$group: {_id:"$_custid",accbal:{$sum:"$accbal"}}},{$match:{accbal:{$gt:200}}});
+{ "_id" : 1, "accbal" : 1000 }
+{ "_id" : 2, "accbal" : 500 }
+{ "_id" : 5, "accbal" : 2200 }
+>
